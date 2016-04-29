@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Share My Trip</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_profile__data">Profile_Data</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_create_form">Create A Ride</string>
+    <string name="title_activity_join">Join A Ride</string>
+    <string name="title_activity_signup">Signup</string>
+    <string name="title_activity_map_full">MapFull</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_full__frag"> Ride Confirmation </string>
+
+</resources>
