@@ -27,8 +27,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.net.ssl.HttpsURLConnection;
 
 import model.BookTrip;
@@ -58,9 +61,10 @@ public class CreateForm extends Activity {
                 int currentDay = currentDate.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog mDatePicker = new DatePickerDialog(CreateForm.this, new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+
                         tripCalendarDate = Calendar.getInstance();
                         tripCalendarDate.set(selectedyear, selectedmonth, selectedday);
-                        SimpleDateFormat format1 = new SimpleDateFormat("MM/dd/yyyy");
+                        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
                         dueDate.setText(format1.format(tripCalendarDate.getTime()));
                         dueDate.clearFocus();
                     }
@@ -92,7 +96,7 @@ public class CreateForm extends Activity {
                 Toast.makeText(getBaseContext(), "Trip was Created Successfully", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(CreateForm.this, Profile.class);
                 startActivity(intent);
-                userObj = registerUser();
+                userObj = registerTrip();
                 new Connect().execute();
 
 
@@ -120,6 +124,7 @@ public class CreateForm extends Activity {
                 onTimeSetListener,
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),
+
                 is24r);
         timePickerDialog.setTitle("            TIME             ");
         timePickerDialog.show();
@@ -149,7 +154,8 @@ public class CreateForm extends Activity {
         }
     };
 
-    public BookTrip registerUser() {
+    public BookTrip registerTrip() {
+        String date_time = "";
         BookTrip book = new BookTrip();
 
         EditText source = (EditText) findViewById(R.id.pickup);
@@ -160,14 +166,22 @@ public class CreateForm extends Activity {
         String uDestination = destination.getText().toString();
         book.setDestination(uDestination);
 
-
         EditText date = (EditText) findViewById(R.id.fillDate);
         String uDate = date.getText().toString();
         book.setDate(uDate);
 
         EditText numberOfPassengers = (EditText) findViewById(R.id.numberOfPassengers);
         String uPassengers = numberOfPassengers.getText().toString();
-        userObj.setNumberOfPassengers(uPassengers);
+        book.setNumberOfPassengers(uPassengers);
+
+
+        date_time = date_time + uDate;
+
+        EditText time = (EditText) findViewById(R.id.fillTime);
+        String uTime = time.getText().toString();
+        book.setDate(uTime);
+        date_time = date_time + " " + uTime;
+        book.setDate(date_time);
 
         SharedPreferences sp = getSharedPreferences("key", Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
@@ -203,10 +217,10 @@ public class CreateForm extends Activity {
 
                 try {
                     JSONObject jsonobj = new JSONObject();
-                    jsonobj.put("firstName", userObj.getSource());
+                    jsonobj.put("fisrstName", userObj.getSource());
                     jsonobj.put("lastName", userObj.getDestination());
-                    jsonobj.put("userId", userObj.getNumberOfPassengers());
-                    jsonobj.put("userPassword", userObj.getDate());
+                    jsonobj.put("passengers", userObj.getNumberOfPassengers());
+                    jsonobj.put("date", userObj.getDate() );
 
                     Log.d(TAG, jsonobj.toString());
 

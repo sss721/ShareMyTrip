@@ -63,6 +63,10 @@
             android:name=".Full_Frag"
             android:label="@string/title_activity_full__frag" >
         </activity>
+        <activity
+            android:name=".ChooseRoute"
+            android:label="@string/title_activity_choose_route" >
+        </activity>
     </application>
 
 </manifest>

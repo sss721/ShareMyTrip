@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import java.util.Date;
+
 /**
  * Created by Shweta on 4/25/2016.
  */
@@ -15,6 +17,8 @@ public class BookTrip implements Parcelable {
     private String destination;
     private String numberOfPassengers;
     private String date;
+    private String time;
+    private Date dateThis;
 
 
 
@@ -44,6 +48,22 @@ public class BookTrip implements Parcelable {
         this.date = date;
     }
 
+    public Date getDateThis() {
+        return dateThis;
+    }
+
+    public void setDateThis(Date date) {
+        this.dateThis = dateThis;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
     public String getSource() {
         return source;
     }
@@ -71,10 +91,12 @@ public class BookTrip implements Parcelable {
         this.destination = p.readString();
         this.numberOfPassengers= p.readString();
         this.date = p.readString();
+        this.time = p.readString();
+        this.dateThis = new Date(p.readLong());
 
     }
 
-    public BookTrip(int id,String source, String destination,String numberOfPassengers,String date ) {
+    public BookTrip(int id,String source, String destination,String numberOfPassengers,String date,String time, Date dateThis  ) {
 
     }
 
