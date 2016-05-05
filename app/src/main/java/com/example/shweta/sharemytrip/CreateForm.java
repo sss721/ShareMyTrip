@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -39,7 +40,7 @@ import model.BookTrip;
 public class CreateForm extends Activity {
     private static final String TAG = "CreateFormActivity";
     Calendar tripCalendarDate;
-    EditText dueDate, time;
+    EditText dueDate, time,passengers ;
     BookTrip userObj;
     TimePickerDialog timePickerDialog;
 
@@ -94,8 +95,8 @@ public class CreateForm extends Activity {
             public void onClick(View view) {
 
                 Toast.makeText(getBaseContext(), "Trip was Created Successfully", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(CreateForm.this, Profile.class);
-                startActivity(intent);
+
+
                 userObj = registerTrip();
                 new Connect().execute();
 
@@ -112,6 +113,15 @@ public class CreateForm extends Activity {
                 startActivity(intent);
             }
         });
+
+        /*passengers = (EditText)findViewById(R.id.numberOfPassengers);
+        passengers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+            }
+        });*/
 
     }
 
@@ -172,7 +182,8 @@ public class CreateForm extends Activity {
 
         EditText numberOfPassengers = (EditText) findViewById(R.id.numberOfPassengers);
         String uPassengers = numberOfPassengers.getText().toString();
-        book.setNumberOfPassengers(uPassengers);
+        int pass = Integer.parseInt(uPassengers);
+        book.setNumberOfPassengers(pass);
 
 
         date_time = date_time + uDate;
@@ -183,10 +194,6 @@ public class CreateForm extends Activity {
         date_time = date_time + " " + uTime;
         book.setDate(date_time);
 
-        SharedPreferences sp = getSharedPreferences("key", Context.MODE_PRIVATE);
-        SharedPreferences.Editor ed = sp.edit();
-        ed.putString("groupID", uSource);
-        ed.commit();
         return book;
     }
 
@@ -197,13 +204,14 @@ public class CreateForm extends Activity {
         protected String doInBackground(String... params) {
             try {
 
-
                 URL url = new URL("http://10.0.3.2:8080/RideShare/searchRoutesForNewCarPoolRequest");
                 Log.d(TAG, "THIS SEEMS GOOD");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
                 connection.setRequestMethod("POST");
+               // connection.setInstanceFollowRedirects(false);
+                boolean redirect = false;
                 Log.d(TAG, "THIS SEEMS GOOD 1");
 
                 //connection.setReadTimeout(10000);
@@ -217,10 +225,10 @@ public class CreateForm extends Activity {
 
                 try {
                     JSONObject jsonobj = new JSONObject();
-                    jsonobj.put("fisrstName", userObj.getSource());
-                    jsonobj.put("lastName", userObj.getDestination());
-                    jsonobj.put("passengers", userObj.getNumberOfPassengers());
-                    jsonobj.put("date", userObj.getDate() );
+                    jsonobj.put("numberOfPassengers", userObj.getNumberOfPassengers());
+                    jsonobj.put("destination", userObj.getDestination());
+                    jsonobj.put("source", userObj.getSource());
+                    jsonobj.put("date", userObj.getDate());
 
                     Log.d(TAG, jsonobj.toString());
 
@@ -228,22 +236,27 @@ public class CreateForm extends Activity {
                     printout.write(jsonobj.toString().getBytes("UTF8"));
 
                     printout.flush();
-                    printout.close();
-
 
                     int responseCode = connection.getResponseCode();
                     Log.i(TAG, "POST Response Code :: " + responseCode);
+
                     if (responseCode == HttpsURLConnection.HTTP_OK) {
-                        Log.d(TAG, "THIS SEEMS GOOD 3");
+
+
                         String line = "";
                         BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        StringBuilder sb = new StringBuilder();
+
                         while ((line = br.readLine()) != null) {
-                            response += line;
+                            sb.append(line + "\n");
+
                         }
+                        response = sb.toString();
+                        Log.i(TAG, response);
+
                     } else {
                         Log.e(TAG, "No Response");
                     }
-
                 } catch (JSONException e) {
                     Log.e("MYAPP", "unexpected JSON exception", e);
                 } catch (IOException e) {
@@ -264,9 +277,10 @@ public class CreateForm extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "User added successfully", Toast.LENGTH_LONG).show();
-            Intent viewTaskIntent = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(viewTaskIntent);
+            Toast.makeText(getBaseContext(), "Ride added successfully", Toast.LENGTH_LONG).show();
+            Intent intent= new Intent(getBaseContext(), ChooseRoute.class);
+            intent.putExtra("Response", response);
+            startActivity(intent);
         }
     }
 

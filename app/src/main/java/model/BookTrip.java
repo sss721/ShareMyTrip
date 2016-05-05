@@ -15,10 +15,10 @@ public class BookTrip implements Parcelable {
     private String userId;
     private String source;
     private String destination;
-    private String numberOfPassengers;
+    private int numberOfPassengers;
     private String date;
     private String time;
-    private Date dateThis;
+
 
 
 
@@ -32,11 +32,11 @@ public class BookTrip implements Parcelable {
         this.destination = destination;
     }
 
-    public String getNumberOfPassengers() {
+    public int getNumberOfPassengers() {
         return numberOfPassengers;
     }
 
-    public void setNumberOfPassengers(String numberOfPassengers) {
+    public void setNumberOfPassengers(int numberOfPassengers) {
         this.numberOfPassengers = numberOfPassengers;
     }
 
@@ -48,13 +48,7 @@ public class BookTrip implements Parcelable {
         this.date = date;
     }
 
-    public Date getDateThis() {
-        return dateThis;
-    }
 
-    public void setDateThis(Date date) {
-        this.dateThis = dateThis;
-    }
 
     public String getTime() {
         return time;
@@ -89,14 +83,13 @@ public class BookTrip implements Parcelable {
         this.userId = p.readString();
         this.source = p.readString();
         this.destination = p.readString();
-        this.numberOfPassengers= p.readString();
+        this.numberOfPassengers= p.readInt();
         this.date = p.readString();
         this.time = p.readString();
-        this.dateThis = new Date(p.readLong());
 
     }
 
-    public BookTrip(int id,String source, String destination,String numberOfPassengers,String date,String time, Date dateThis  ) {
+    public BookTrip(int id,String source, String destination,int numberOfPassengers,String date,String time  ) {
 
     }
 
