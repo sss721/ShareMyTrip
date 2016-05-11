@@ -13,5 +13,6 @@
     <string name="title_activity_map">MapActivity</string>
     <string name="title_activity_full__frag"> Ride Confirmation </string>
     <string name="title_activity_choose_route">ChooseRoute</string>
+    <string name="title_activity_ride_choice">RideChoice</string>
 
 </resources>

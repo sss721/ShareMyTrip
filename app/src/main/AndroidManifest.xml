@@ -67,6 +67,10 @@
             android:name=".ChooseRoute"
             android:label="@string/title_activity_choose_route" >
         </activity>
+        <activity
+            android:name=".RideChoice"
+            android:label="@string/title_activity_ride_choice" >
+        </activity>
     </application>
 
 </manifest>

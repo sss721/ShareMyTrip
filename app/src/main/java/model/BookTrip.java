@@ -12,12 +12,30 @@ import java.util.Date;
 public class BookTrip implements Parcelable {
 
     private int id;
-    private String userId;
     private String source;
     private String destination;
     private int numberOfPassengers;
     private String date;
     private String time;
+    private String carType;
+
+    public String getCarType() {
+        return carType;
+    }
+
+    public void setCarType(String carType) {
+        this.carType = carType;
+    }
+
+    public String getSelectRoute() {
+        return selectRoute;
+    }
+
+    public void setSelectRoute(String selectRoute) {
+        this.selectRoute = selectRoute;
+    }
+
+    private String selectRoute;
 
 
 
@@ -80,16 +98,17 @@ public class BookTrip implements Parcelable {
 
         Log.d("Parcel object: ", p.toString());
         this.id = p.readInt();
-        this.userId = p.readString();
         this.source = p.readString();
         this.destination = p.readString();
         this.numberOfPassengers= p.readInt();
         this.date = p.readString();
+        this.carType = p.readString();
+        this.selectRoute = p.readString();
         this.time = p.readString();
 
     }
 
-    public BookTrip(int id,String source, String destination,int numberOfPassengers,String date,String time  ) {
+    public BookTrip(int id,String source, String destination,int numberOfPassengers,String date,String time , String carType, String selectRoute ) {
 
     }
 

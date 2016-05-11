@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -40,15 +41,22 @@ import model.BookTrip;
 public class CreateForm extends Activity {
     private static final String TAG = "CreateFormActivity";
     Calendar tripCalendarDate;
-    EditText dueDate, time,passengers ;
+    EditText dueDate, time;
     BookTrip userObj;
     TimePickerDialog timePickerDialog;
+    SharedPreferences sharedpreferences;
+    String ext;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_form);
+
+        Bundle extras = getIntent().getExtras();
+        ext = (String) extras.get("CarType");
 
 
         dueDate = (EditText) findViewById(R.id.fillDate);
@@ -103,6 +111,7 @@ public class CreateForm extends Activity {
 
             }
         });
+
 
         ImageButton cancel = (ImageButton) findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -210,8 +219,7 @@ public class CreateForm extends Activity {
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
                 connection.setRequestMethod("POST");
-               // connection.setInstanceFollowRedirects(false);
-                boolean redirect = false;
+
                 Log.d(TAG, "THIS SEEMS GOOD 1");
 
                 //connection.setReadTimeout(10000);
@@ -231,6 +239,15 @@ public class CreateForm extends Activity {
                     jsonobj.put("date", userObj.getDate());
 
                     Log.d(TAG, jsonobj.toString());
+
+
+                    sharedpreferences =getSharedPreferences("key", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor ed=sharedpreferences.edit();
+                    ed.putString("jsonObject", jsonobj.toString());
+                    ed.putString("CarType",ext);
+                    ed.putString("Source",userObj.getSource());
+                    ed.putString("Destination",userObj.getDestination());
+                    ed.commit();
 
                     DataOutputStream printout = new DataOutputStream(connection.getOutputStream());
                     printout.write(jsonobj.toString().getBytes("UTF8"));

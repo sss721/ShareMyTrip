@@ -44,8 +44,9 @@ public class Signup extends Activity {
    // private static final String url = "http://localhost:8080/rideshare/newuser";
    // private static final String user = "";
     //private static final String passwd = "";
+
+    SharedPreferences sharedpreferences;
     ImageButton submit;
-    Context cntx;
     User userObj;
 
 
@@ -110,9 +111,9 @@ public class Signup extends Activity {
         String uAboutMe = aboutMe.getText().toString();
         user.setAboutMe(uAboutMe);
 
-        SharedPreferences sp=getSharedPreferences("key", Context.MODE_PRIVATE);
-        SharedPreferences.Editor ed=sp.edit();
-        ed.putString("groupID", uName);
+        sharedpreferences = getSharedPreferences("key", Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed=sharedpreferences.edit();
+        ed.putString("userName", uUserName);
         ed.commit();
         return user;
     }
