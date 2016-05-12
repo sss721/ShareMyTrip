@@ -71,6 +71,10 @@
             android:name=".RideChoice"
             android:label="@string/title_activity_ride_choice" >
         </activity>
+        <activity
+            android:name=".DisplayJoin"
+            android:label="@string/title_activity_display_join" >
+        </activity>
     </application>
 
 </manifest>

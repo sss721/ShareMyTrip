@@ -1,14 +1,23 @@
 package com.example.shweta.sharemytrip;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -34,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
 import javax.net.ssl.HttpsURLConnection;
 
 import model.BookTrip;
@@ -41,12 +51,16 @@ import model.BookTrip;
 public class CreateForm extends Activity {
     private static final String TAG = "CreateFormActivity";
     Calendar tripCalendarDate;
-    EditText dueDate, time;
+    EditText dueDate, time, passengers, source;
     BookTrip userObj;
     TimePickerDialog timePickerDialog;
     SharedPreferences sharedpreferences;
-    String ext;
+    private LocationManager locationManager = null;
+    private LocationListener locationListener = null;
+    private Boolean flag = false;
 
+
+    String ext;
 
 
     @Override
@@ -97,6 +111,8 @@ public class CreateForm extends Activity {
 
             }
         });
+
+
         ImageButton submit = (ImageButton) findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +121,7 @@ public class CreateForm extends Activity {
                 Toast.makeText(getBaseContext(), "Trip was Created Successfully", Toast.LENGTH_SHORT).show();
 
 
-                userObj = registerTrip();
+                userObj =registerTrip();
                 new Connect().execute();
 
 
@@ -114,26 +130,55 @@ public class CreateForm extends Activity {
 
 
         ImageButton cancel = (ImageButton) findViewById(R.id.cancel);
-        cancel.setOnClickListener(new View.OnClickListener() {
+        cancel.setOnClickListener(new View.OnClickListener()
+
+                                  {
+                                      @Override
+                                      public void onClick(View view) {
+                                          Toast.makeText(getBaseContext(), "Trip was Cancelled", Toast.LENGTH_LONG).show();
+                                          Intent intent = new Intent(CreateForm.this, Profile.class);
+                                          startActivity(intent);
+                                      }
+                                  }
+
+        );
+
+        passengers = (EditText) findViewById(R.id.numberOfPassengers);
+
+        passengers.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getBaseContext(), "Trip was Cancelled", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(CreateForm.this, Profile.class);
-                startActivity(intent);
+                NumberPicker numberPicker = new NumberPicker(CreateForm.this);
+                numberPicker.setMaxValue(50);
+                numberPicker.setMinValue(0);
+                NumberPicker.OnValueChangeListener valueChangeListener = new NumberPicker.OnValueChangeListener() {
+                    @Override
+                    public void onValueChange(NumberPicker picker, int OldVal, int newVal) {
+                        passengers.setText("" + newVal);
+                    }
+                };
+                numberPicker.setOnValueChangedListener(valueChangeListener);
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateForm.this).setView(numberPicker);
+                builder.setTitle("SEATS AVAILABLE");
+                builder.setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                    }
+
+                });
+                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                        .show();
+
             }
         });
-
-        /*passengers = (EditText)findViewById(R.id.numberOfPassengers);
-        passengers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-            }
-        });*/
-
     }
-
 
     private void openTimePickerDialog(boolean is24r) {
         Calendar calendar = Calendar.getInstance();
@@ -241,12 +286,12 @@ public class CreateForm extends Activity {
                     Log.d(TAG, jsonobj.toString());
 
 
-                    sharedpreferences =getSharedPreferences("key", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor ed=sharedpreferences.edit();
+                    sharedpreferences = getSharedPreferences("key", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor ed = sharedpreferences.edit();
                     ed.putString("jsonObject", jsonobj.toString());
-                    ed.putString("CarType",ext);
-                    ed.putString("Source",userObj.getSource());
-                    ed.putString("Destination",userObj.getDestination());
+                    ed.putString("CarType", ext);
+                    ed.putString("Source", userObj.getSource());
+                    ed.putString("Destination", userObj.getDestination());
                     ed.commit();
 
                     DataOutputStream printout = new DataOutputStream(connection.getOutputStream());
@@ -295,10 +340,10 @@ public class CreateForm extends Activity {
         @Override
         protected void onPostExecute(String result) {
             Toast.makeText(getBaseContext(), "Ride added successfully", Toast.LENGTH_LONG).show();
-            Intent intent= new Intent(getBaseContext(), ChooseRoute.class);
+            Intent intent = new Intent(getBaseContext(), ChooseRoute.class);
             intent.putExtra("Response", response);
             startActivity(intent);
         }
     }
-
 }
+

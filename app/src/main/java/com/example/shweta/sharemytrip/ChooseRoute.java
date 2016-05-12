@@ -40,12 +40,17 @@ public class ChooseRoute extends ListActivity {
     ArrayList<HashMap<String, String>> routesList;
     Context context;
     SharedPreferences sharedpreferences;
-    String address = "";
+    HashMap<Integer, String> addressMap;
+    HashMap<Integer, JSONObject> addressSend;
+
+    String formatAddress = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         routesList = new ArrayList<HashMap<String, String>>();
+        addressMap = new HashMap<Integer, String>();
+        addressSend = new HashMap<Integer, JSONObject>();
         setContentView(R.layout.activity_choose_route);
 
         Bundle extras = getIntent().getExtras();
@@ -58,13 +63,18 @@ public class ChooseRoute extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+                Log.i("position", "" + position);
+                final String rt = addressMap.get(position);
+                final JSONObject sentStr = addressSend.get(position);
                 new AlertDialog.Builder(ChooseRoute.this)
                         .setTitle("RIDE DETAILS")
-                        .setMessage(address)
+                        .setMessage(rt)
                         .setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
-                                new SendData().execute(address);
+                                Log.i("check for this link","" + sentStr);
+
+                                new SendData().execute(sentStr);
 
 
                             }
@@ -74,7 +84,6 @@ public class ChooseRoute extends ListActivity {
                                 // do nothing
                             }
                         })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
 
             }
@@ -97,15 +106,19 @@ public class ChooseRoute extends ListActivity {
                     //String address = "";
                     JSONObject jb = jarr.getJSONObject(i);
                     String i_add = jb.getString("address");
-                    String distanceCovered = jb.getJSONObject("distance").getString("inMeters");
-                    String timeTaken = jb.getJSONObject("timetaken").getString("inSeconds");
+                    String distanceCovered = jb.getJSONObject("distance").getString("humanReadable");
+                    String timeTaken = jb.getJSONObject("timetaken").getString("humanReadable");
                     JSONArray add = new JSONArray(i_add);
 
                     Log.i("..........", "" + i);
 
+                    String address = "";
+
                     for (int j = 0; j < add.length(); j++) {
 
-                        address = address + add.getString(j);
+                        address = address + add.getString(j) ;
+
+
                     }
 
 
@@ -113,6 +126,13 @@ public class ChooseRoute extends ListActivity {
                     map2.put(TAG, "ROUTE " + "" + (i + 1));
                     map2.put(TAG_DISTANCE, "DISTANCE : " + distanceCovered);
                     map2.put(TAG_TIME, "TIME : " + timeTaken);
+
+
+
+
+                    addressMap.put(i, address);
+                    addressSend.put(i,jarr.getJSONObject(i));
+
 
                     routesList.add(map2);
 
@@ -134,20 +154,19 @@ public class ChooseRoute extends ListActivity {
             SimpleAdapter adapter = new SimpleAdapter(ChooseRoute.this, routesList, R.layout.activity_list, new String[]{TAG, TAG_DISTANCE, TAG_TIME}, new int[]{R.id.textView3, R.id.textView4, R.id.textView5});
             setListAdapter(adapter);
 
-            Toast.makeText(getApplicationContext(), "Check out routes",
-                    Toast.LENGTH_SHORT).show();
-
 
         }
     }
 
-    private class SendData extends AsyncTask<String, Void, String> {
+    private class SendData extends AsyncTask<JSONObject, Void, String> {
         String response = "";
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(JSONObject... params) {
 
             try {
+
+                JSONObject selectRoute = params[0];
                 URL url = new URL("http://10.0.3.2:8080/RideShare/newpoolrequest");
                 Log.d(TAG, "CHOOSE ROUTE 1");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -166,15 +185,17 @@ public class ChooseRoute extends ListActivity {
                 SharedPreferences sharedpreferences = getSharedPreferences("key", MODE_PRIVATE);
                 String jsonData = (sharedpreferences.getString("jsonObject", ""));
                 String carType = (sharedpreferences.getString("CarType", ""));
-                String userName = (sharedpreferences.getString("userName", ""));
+                String userId = (sharedpreferences.getString("userName", ""));
 
-                Log.i("SEND DATA PART",jsonData + carType + userName );
+                Log.i("SEND DATA PART", jsonData + carType + userId);
 
 
                 JSONObject jsonobj = new JSONObject(jsonData);
                 jsonobj.put("carType", carType);
-                jsonobj.put("userId", userName);
-                jsonobj.put("selectRoute", address);
+                jsonobj.put("userId", userId);
+                jsonobj.put("selectRoute", selectRoute);
+
+                Log.i("THIS IS THE TRUE LIN", jsonobj.toString());
 
 
                 printout.write(jsonobj.toString().getBytes("UTF8"));

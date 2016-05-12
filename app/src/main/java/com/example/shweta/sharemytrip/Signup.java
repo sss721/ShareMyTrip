@@ -45,7 +45,7 @@ public class Signup extends Activity {
    // private static final String user = "";
     //private static final String passwd = "";
 
-    SharedPreferences sharedpreferences;
+
     ImageButton submit;
     User userObj;
 
@@ -69,7 +69,7 @@ public class Signup extends Activity {
             @Override
             public void onClick(View view) {
                 userObj = registerUser();
-               // saveUser(userObj);
+                saveUser(userObj);
                 new Connect().execute();
         }   });
     }
@@ -111,11 +111,18 @@ public class Signup extends Activity {
         String uAboutMe = aboutMe.getText().toString();
         user.setAboutMe(uAboutMe);
 
-        sharedpreferences = getSharedPreferences("key", Context.MODE_PRIVATE);
-        SharedPreferences.Editor ed=sharedpreferences.edit();
-        ed.putString("userName", uUserName);
-        ed.commit();
+
         return user;
+    }
+
+    public void saveUser(User user){
+
+        UserDatabaseHelper databaseHelper = new UserDatabaseHelper(this,null,null,1);
+        long taskID = databaseHelper.insertUser(user);
+        Toast.makeText(getBaseContext(), "User Registered successfully.", Toast.LENGTH_SHORT).show();
+        Log.d("USer created with id: ", Long.toString(taskID));
+        //finish();
+
     }
 
 
