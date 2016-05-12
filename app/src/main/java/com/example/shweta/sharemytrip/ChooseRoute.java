@@ -116,7 +116,7 @@ public class ChooseRoute extends ListActivity {
 
                     for (int j = 0; j < add.length(); j++) {
 
-                        address = address + add.getString(j) ;
+                        address = address + add.getString(j) + '\n' ;
 
 
                     }
@@ -167,7 +167,7 @@ public class ChooseRoute extends ListActivity {
             try {
 
                 JSONObject selectRoute = params[0];
-                URL url = new URL("http://10.0.3.2:8080/RideShare/newpoolrequest");
+                URL url = new URL("http://ec2-52-91-16-146.compute-1.amazonaws.com:8080/RideShare/newpoolrequest");
                 Log.d(TAG, "CHOOSE ROUTE 1");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);

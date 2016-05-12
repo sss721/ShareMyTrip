@@ -29,8 +29,10 @@ public class DisplayJoin extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_join);
 
+        joinRide = new ArrayList<HashMap<String, String>>();
+
         Bundle extras = getIntent().getExtras();
-        String joinRoutes = (String) extras.get("retResponse");
+        String joinRoutes = (String) extras.get("Response");
         joinTime = (String) extras.get("joinTime");
 
         new JoinRoutes().execute(joinRoutes);
@@ -49,17 +51,23 @@ public class DisplayJoin extends ListActivity {
 
                     JSONObject jb = jarr.getJSONObject(i);
                     String creator = jb.getString("creator");
+                    Log.i(TAG, creator);
                     String source = jb.getString("source");
+                    Log.i(TAG, source);
                     String destination = jb.getString("destination");
-                    String seatsAvailable = jb.getString("seatsAvailable");
+                    Log.i(TAG, destination);
+                    String seatsAvailable = jb.getString("requiredSeats");
+                    Log.i(TAG, seatsAvailable);
 
                     String firstName = jb.getJSONObject("profile").getString("firstName");
+                    Log.i(TAG, firstName);
                     String lastName =jb.getJSONObject("profile").getString("lastName");
+                    Log.i(TAG, lastName);
 
 
                     HashMap<String, String> joinMap2 = new HashMap<String, String>();
 
-                    joinMap2.put(TAG, "CREATOR : " + firstName + lastName);
+                    joinMap2.put(TAG, "CREATOR NAME : " + firstName + lastName);
                     joinMap2.put(TAG, "CREATOR ID : " + creator);
                     joinMap2.put(TAG_SOURCEDES, "ROUTE : " + source + " -->" + destination);
                     joinMap2.put(TAG_SEATS, "SEATS AVAILABLE : " + seatsAvailable);

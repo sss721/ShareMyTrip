@@ -22,8 +22,9 @@
         android:id="@+id/src"
         android:hint="Source"
         android:layout_below="@+id/imageView6"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/imageView6"
+        android:layout_alignStart="@+id/look" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -81,6 +82,16 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="28dp"
         android:layout_alignParentEnd="true" />
+
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/geoLocation"
+        android:background="#00FFFFFF"
+        android:src="@drawable/marker"
+        android:layout_alignTop="@+id/src"
+        android:layout_toStartOf="@+id/src" />
 
 
 </RelativeLayout>

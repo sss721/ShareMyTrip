@@ -5,12 +5,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.app.VoiceInteractor;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,6 +21,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -43,8 +48,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.xml.transform.Source;
 
 import model.BookTrip;
 
@@ -53,11 +61,11 @@ public class CreateForm extends Activity {
     Calendar tripCalendarDate;
     EditText dueDate, time, passengers, source;
     BookTrip userObj;
+    ImageButton btnShowLocation;
     TimePickerDialog timePickerDialog;
     SharedPreferences sharedpreferences;
-    private LocationManager locationManager = null;
-    private LocationListener locationListener = null;
-    private Boolean flag = false;
+
+    GPSTracker gps;
 
 
     String ext;
@@ -71,6 +79,29 @@ public class CreateForm extends Activity {
 
         Bundle extras = getIntent().getExtras();
         ext = (String) extras.get("CarType");
+        btnShowLocation = (ImageButton) findViewById(R.id.geoLocation);
+
+
+        btnShowLocation.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+                gps = new GPSTracker(CreateForm.this);
+
+                if(gps.canGetLocation()) {
+                    double latitude = gps.getLatitude();
+                    double longitude = gps.getLongitude();
+
+                   String value = geoLoc(latitude,longitude,1);
+                   source = (EditText)findViewById(R.id.pickup);
+                    source.setText(value);
+                } else {
+                    gps.showSettingsAlert();
+                }
+            }
+        });
+
 
 
         dueDate = (EditText) findViewById(R.id.fillDate);
@@ -121,7 +152,7 @@ public class CreateForm extends Activity {
                 Toast.makeText(getBaseContext(), "Trip was Created Successfully", Toast.LENGTH_SHORT).show();
 
 
-                userObj =registerTrip();
+                userObj = registerTrip();
                 new Connect().execute();
 
 
@@ -179,6 +210,31 @@ public class CreateForm extends Activity {
             }
         });
     }
+    public String geoLoc(Double lat, Double lon, int value) {
+        Geocoder geocoder;
+        List<Address> addresses;
+        String addSrc = "";
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+
+            addresses = geocoder.getFromLocation(lat, lon, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            String state = addresses.get(0).getAdminArea();
+            String postalCode = addresses.get(0).getPostalCode();
+
+
+            addSrc = address + " " + state + " " + postalCode;
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return  addSrc;
+
+    }
+
+
 
     private void openTimePickerDialog(boolean is24r) {
         Calendar calendar = Calendar.getInstance();
@@ -258,7 +314,7 @@ public class CreateForm extends Activity {
         protected String doInBackground(String... params) {
             try {
 
-                URL url = new URL("http://10.0.3.2:8080/RideShare/searchRoutesForNewCarPoolRequest");
+                URL url = new URL("http://ec2-52-91-16-146.compute-1.amazonaws.com:8080/RideShare/searchRoutesForNewCarPoolRequest");
                 Log.d(TAG, "THIS SEEMS GOOD");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);

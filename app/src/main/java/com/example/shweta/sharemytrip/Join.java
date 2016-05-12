@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -48,14 +51,39 @@ import model.BookTrip;
 public class Join extends Activity {
     private static final String TAG = "JoinActivity";
     BookTrip joinObj;
-    EditText joinDate, joinTime, passengers;
+    EditText joinDate, joinTime, passengers, source;
     TimePickerDialog timePickerDialog;
     Calendar joinCalendarDate;
+    ImageButton btnShowLocation;
+    GPSTracker gps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
+
+        btnShowLocation = (ImageButton) findViewById(R.id.geoLocation);
+
+
+        btnShowLocation.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+                gps = new GPSTracker(Join.this);
+
+                if (gps.canGetLocation()) {
+                    double latitude = gps.getLatitude();
+                    double longitude = gps.getLongitude();
+
+                    String value = geoLoc(latitude, longitude, 1);
+                    source = (EditText) findViewById(R.id.src);
+                    source.setText(value);
+                } else {
+                    gps.showSettingsAlert();
+                }
+            }
+        });
 
 
         joinDate = (EditText) findViewById(R.id.joinDate);
@@ -145,6 +173,31 @@ public class Join extends Activity {
 
     }
 
+    public String geoLoc(Double lat, Double lon, int value) {
+        Geocoder geocoder;
+        List<Address> addresses;
+        String addSrc = "";
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+
+            addresses = geocoder.getFromLocation(lat, lon, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            String city = addresses.get(0).getLocality();
+            String state = addresses.get(0).getAdminArea();
+            String postalCode = addresses.get(0).getPostalCode();
+
+
+            addSrc = address + " " + city + " " + state + " " + postalCode;
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return  addSrc;
+
+    }
+
     private void openTimePicker(boolean is24r) {
         Calendar calendar = Calendar.getInstance();
 
@@ -227,7 +280,7 @@ public class Join extends Activity {
         protected String doInBackground(String... params) {
             try {
 
-                URL url = new URL("http://10.0.3.2:8080/RideShare/searchCarForPooling");
+                URL url = new URL("http://ec2-52-91-16-146.compute-1.amazonaws.com:8080/RideShare/searchCarForPooling");
                 Log.d(TAG, "CONNECTION IN JOIN ACTIVITY");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);

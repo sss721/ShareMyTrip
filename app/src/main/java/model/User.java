@@ -13,6 +13,7 @@ public class User implements Parcelable {
     private String userAddress;
     private String firstName;
     private String lastName;
+    private String emailAddress;
     private String phoneNumber;
     private String sex;
     private String aboutMe;
@@ -29,6 +30,14 @@ public class User implements Parcelable {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getLastName() {
@@ -99,6 +108,7 @@ public class User implements Parcelable {
         Log.d("Parcel object: ", p.toString());
         this.id = p.readInt();
         this.firstName = p.readString();
+        this.emailAddress = p.readString();
         this.userName = p.readString();
         this.userPassword = p.readString();
         this.lastName = p.readString();
@@ -108,7 +118,7 @@ public class User implements Parcelable {
         this.aboutMe = p.readString();
     }
 
-    public User(int id,String firstName, String userName,String userPassword,String lastName, String userAddress,String sex, String phoneNumber,  String aboutMe ) {
+    public User(int id,String firstName, String emailAddress, String userName,String userPassword,String lastName, String userAddress,String sex, String phoneNumber,  String aboutMe ) {
 
     }
 

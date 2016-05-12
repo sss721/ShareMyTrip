@@ -40,7 +40,7 @@ import model.User;
 
 public class Signup extends Activity {
     private static final String TAG = "SignUpActivity";
-    EditText firstName,lastName, userName ,userPassword, address,gender,phone,aboutMe;
+    EditText firstName,lastName,emailAddress, userName ,userPassword, address,gender,phone,aboutMe;
    // private static final String url = "http://localhost:8080/rideshare/newuser";
    // private static final String user = "";
     //private static final String passwd = "";
@@ -57,6 +57,7 @@ public class Signup extends Activity {
 
         firstName = (EditText)findViewById(R.id.fillfirstname);
         lastName = (EditText)findViewById(R.id.filllastname);
+        emailAddress = (EditText)findViewById(R.id.fillemail);
         userName = (EditText)findViewById(R.id.fillusername);
         userPassword = (EditText)findViewById(R.id.fillpassword);
         address = (EditText)findViewById(R.id.filladdress);
@@ -85,6 +86,10 @@ public class Signup extends Activity {
         EditText lastName = (EditText) findViewById(R.id.filllastname);
         String uLast = lastName.getText().toString();
         user.setLastName(uLast);
+
+        EditText emailAddress = (EditText) findViewById(R.id.fillfirstname);
+        String uEmail = emailAddress.getText().toString();
+        user.setFirstName(uEmail);
 
         EditText userName = (EditText) findViewById(R.id.fillusername);
         String uUserName = userName.getText().toString();
@@ -136,7 +141,7 @@ public class Signup extends Activity {
 
                 String message = new JSONObject().toString();
 
-                URL url = new URL("http://10.0.3.2:8080/RideShare/newuser");
+                URL url = new URL("http://ec2-52-91-16-146.compute-1.amazonaws.com:8080/RideShare/newuser");
                 Log.d(TAG,"THIS SEEMS GOOD");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);
@@ -158,6 +163,7 @@ public class Signup extends Activity {
                     JSONObject jsonobj = new JSONObject();
                     jsonobj.put("firstName", userObj.getFirstName());
                     jsonobj.put("lastName", userObj.getLastName());
+                    jsonobj.put("emailAddress", userObj.getEmailAddress());
                     jsonobj.put("userName", userObj.getUserName());
                     jsonobj.put("userPassword", userObj.getUserPassword());
                     jsonobj.put("userAddress", userObj.getUserAddress());

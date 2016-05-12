@@ -17,9 +17,10 @@
         android:inputType="date"
         android:textColorHint="#777777"
         android:focusableInTouchMode="false"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/destination" />
+        android:layout_below="@+id/destination"
+        android:layout_alignEnd="@+id/fillTime"
+        android:layout_marginTop="51dp"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:id="@+id/fillTime"
@@ -30,10 +31,10 @@
         android:hint="Time"
         android:textColorHint="#777777"
         android:focusableInTouchMode="false"
-        android:layout_above="@+id/numberOfPassengers"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="24dp"
-        android:layout_alignEnd="@+id/numberOfPassengers" />
+        android:layout_below="@+id/fillDate"
+        android:layout_alignEnd="@+id/cancel"
+        android:layout_marginTop="49dp"
+        android:layout_alignParentStart="true" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -41,9 +42,9 @@
         android:id="@+id/submit"
         android:src="@drawable/submitnow"
         android:background="#ffffffff"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/numberOfPassengers"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="30dp" />
+        android:layout_marginTop="66dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -51,7 +52,8 @@
         android:id="@+id/pickup"
         android:hint="Source"
         android:layout_below="@+id/imageView6"
-        android:layout_alignEnd="@+id/destination"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="27dp"
         android:layout_toEndOf="@+id/geoLocation" />
 
     <EditText
@@ -59,10 +61,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/destination"
         android:hint="Destination"
-        android:layout_above="@+id/fillDate"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="27dp"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/pickup"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="59dp"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -72,9 +74,10 @@
         android:id="@+id/numberOfPassengers"
         android:hint="Seats Available"
         android:focusableInTouchMode="false"
-        android:layout_above="@+id/cancel"
+        android:layout_below="@+id/fillTime"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/cancel" />
+        android:layout_marginTop="62dp"
+        android:layout_alignParentEnd="true" />
 
     <ImageView
         android:layout_width="wrap_content"
