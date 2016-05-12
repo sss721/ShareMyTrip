@@ -23,8 +23,7 @@
         android:hint="Source"
         android:layout_below="@+id/imageView6"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/imageView6"
-        android:layout_alignStart="@+id/look" />
+        android:layout_toEndOf="@+id/geoLocation" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -42,8 +41,9 @@
         android:id="@+id/look"
         android:background="#ffffffff"
         android:src="@drawable/searchride"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/seatsAvailable"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="92dp" />
 
     <EditText
         android:id="@+id/joinDate"
@@ -54,9 +54,10 @@
         android:inputType="date"
         android:textColorHint="#777777"
         android:focusableInTouchMode="false"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/des"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginTop="61dp"
+        android:layout_alignEnd="@+id/joinTime" />
 
     <EditText
         android:id="@+id/joinTime"
@@ -91,7 +92,7 @@
         android:background="#00FFFFFF"
         android:src="@drawable/marker"
         android:layout_alignTop="@+id/src"
-        android:layout_toStartOf="@+id/src" />
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

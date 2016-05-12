@@ -14,8 +14,9 @@
         android:id="@+id/imageButton"
         android:src="@drawable/submitnow"
         android:background="#ffffffff"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/fillaboutme"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="71dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -58,8 +59,9 @@
         android:ems="10"
         android:id="@+id/fillphone"
         android:hint="Phone Number"
-        android:layout_below="@+id/filladdress"
-        android:layout_alignEnd="@+id/filladdress" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/fillgender" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -67,8 +69,8 @@
         android:id="@+id/fillaboutme"
         android:hint="About Me"
         android:layout_below="@+id/fillphone"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -77,7 +79,8 @@
         android:hint="Gender"
         android:layout_below="@+id/filladdress"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/imageButton" />
+        android:layout_toStartOf="@+id/imageButton"
+        android:layout_alignParentEnd="true" />
 
     <ImageView
         android:layout_width="wrap_content"
