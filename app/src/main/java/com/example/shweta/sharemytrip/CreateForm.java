@@ -89,19 +89,18 @@ public class CreateForm extends Activity {
             public void onClick(View v) {
                 gps = new GPSTracker(CreateForm.this);
 
-                if(gps.canGetLocation()) {
+                if (gps.canGetLocation()) {
                     double latitude = gps.getLatitude();
                     double longitude = gps.getLongitude();
 
-                   String value = geoLoc(latitude,longitude,1);
-                   source = (EditText)findViewById(R.id.pickup);
+                    String value = geoLoc(latitude, longitude, 1);
+                    source = (EditText) findViewById(R.id.pickup);
                     source.setText(value);
                 } else {
                     gps.showSettingsAlert();
                 }
             }
         });
-
 
 
         dueDate = (EditText) findViewById(R.id.fillDate);
@@ -210,6 +209,7 @@ public class CreateForm extends Activity {
             }
         });
     }
+
     public String geoLoc(Double lat, Double lon, int value) {
         Geocoder geocoder;
         List<Address> addresses;
@@ -314,7 +314,7 @@ public class CreateForm extends Activity {
         protected String doInBackground(String... params) {
             try {
 
-                URL url = new URL("http://ec2-52-91-16-146.compute-1.amazonaws.com:8080/RideShare/searchRoutesForNewCarPoolRequest");
+                URL url = new URL("http://ec2-user@ec2-54-175-188-250.compute-1.amazonaws.com:8080/RideShare/searchRoutesForNewCarPoolRequest");
                 Log.d(TAG, "THIS SEEMS GOOD");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);
@@ -402,4 +402,5 @@ public class CreateForm extends Activity {
         }
     }
 }
+
 

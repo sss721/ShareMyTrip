@@ -152,7 +152,7 @@ public class DisplayJoin extends ListActivity {
             try {
 
                 JSONObject selectRoute = params[0];
-                URL url = new URL("http://ec2-52-91-16-146.compute-1.amazonaws.com:8080/RideShare/acceptRide");
+                URL url = new URL("http://ec2-user@ec2-54-175-188-250.compute-1.amazonaws.com:8080/RideShare/acceptRide");
                 Log.d(TAG, "DISPLAY JOIN 1");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);

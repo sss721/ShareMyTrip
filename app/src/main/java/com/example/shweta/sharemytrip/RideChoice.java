@@ -31,7 +31,7 @@ public class RideChoice extends Activity {
         join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RideChoice.this, CreateForm.class);
+                Intent intent = new Intent(RideChoice.this, uberActivity.class);
                 intent.putExtra("CarType","Uber");
                 startActivity(intent);
             }

@@ -280,7 +280,7 @@ public class Join extends Activity {
         protected String doInBackground(String... params) {
             try {
 
-                URL url = new URL("http://ec2-52-91-16-146.compute-1.amazonaws.com:8080/RideShare/searchCarForPooling");
+                URL url = new URL("http://ec2-user@ec2-54-175-188-250.compute-1.amazonaws.com:8080/RideShare/searchCarForPooling");
                 Log.d(TAG, "CONNECTION IN JOIN ACTIVITY");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);

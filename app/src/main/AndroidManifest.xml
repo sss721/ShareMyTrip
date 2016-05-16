@@ -71,6 +71,10 @@
             android:name=".DisplayJoin"
             android:label="@string/title_activity_display_join" >
         </activity>
+        <activity
+            android:name=".uberActivity"
+            android:label="@string/title_activity_uber" >
+        </activity>
     </application>
 
 </manifest>

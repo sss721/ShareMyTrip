@@ -141,7 +141,7 @@ public class Signup extends Activity {
 
                 String message = new JSONObject().toString();
 
-                URL url = new URL("http://ec2-52-91-16-146.compute-1.amazonaws.com:8080/RideShare/newuser");
+                URL url = new URL("http://ec2-user@ec2-54-175-188-250.compute-1.amazonaws.com:8080/RideShare/newuser");
                 Log.d(TAG,"THIS SEEMS GOOD");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);

@@ -13,7 +13,7 @@
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/put_email"
-        android:hint=" Email"
+        android:hint=" User Name"
         android:layout_below="@+id/login_icon"
         android:layout_marginTop="67dp"
         android:layout_alignEnd="@+id/signup"
@@ -38,7 +38,7 @@
         android:src="@drawable/images2"
         android:background="#00FFFFFF"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/signup" />
+        android:layout_centerHorizontal="true" />
 
     <ImageButton
         android:layout_width="wrap_content"
